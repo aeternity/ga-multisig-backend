@@ -15,10 +15,12 @@
     "@aeternity/aepp-sdk": "^11.0.1",
     "axios": "^0.27.2",
     "buffer": "^6.0.3",
-    "core-js": "^3.24.1",
+    "core-js": "^3.6.5",
     "ga-multisig-contract": "github:aeternity/ga-multisig-contract",
     "raw-loader": "^4.0.2",
+    "sequelize": "^6.20.0",
     "simpledotcss": "^2.1.0",
+    "sqlite3": "^5.0.8",
     "vue": "^3.2.37",
     "vue-router": "^4.1.3"
   },
