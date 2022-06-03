@@ -1,20 +1,35 @@
-const {DataTypes} = require('sequelize');
-const {sequelize} = require('./db')
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('./db');
 
-const Signer = sequelize.define('Signer', {
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true
+const Signer = sequelize.define(
+  'Signer',
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+    signerId: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    contractId: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    txi: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   },
-  signerId: {
-    type: DataTypes.STRING,
-    allowNull: false
+  {
+    indexes: [
+      {
+        unique: true,
+        fields: ['signerId', 'contractId'],
+      },
+    ],
   },
-  contractId: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-});
+);
 
 module.exports = Signer;
