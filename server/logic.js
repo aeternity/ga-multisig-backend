@@ -1,12 +1,10 @@
-const fs = require('fs');
-const path = require('path');
 const axios = require('axios');
 const { Universal, Node } = require('@aeternity/aepp-sdk');
 const Signer = require('./Signer');
 
-const CONTRACT_SOURCE = fs.readFileSync(path.join(__dirname, '../utils/aeternity/contracts/SimpleGAMultiSig.aes'), 'utf-8');
+const CONTRACT_SOURCE = require('ga-multisig-contract/SimpleGAMultiSig.aes');
 
-const mdwBaseUrl = 'https://testnet.aeternity.art/mdw';
+const mdwBaseUrl = 'https://testnet.aeternity.io/mdw';
 let client = null;
 
 const initClient = async () => {
@@ -16,7 +14,7 @@ const initClient = async () => {
       nodes: [
         {
           name: 'node',
-          instance: await Node({ url: 'https://testnet.aeternity.art/' }),
+          instance: await Node({ url: 'https://testnet.aeternity.io/' }),
         },
       ],
     });
@@ -42,11 +40,11 @@ const indexSigners = async (lastTxi = 0, url = `/v2/txs?scope=txi:${lastTxi}-${N
   await owners.reduce(async (promiseAcc, { ownerId, txi }) => {
     const acc = await promiseAcc;
     try {
-      const contractAddress = await axios.get(`https://testnet.aeternity.art/v3/accounts/${ownerId}`).then(({ data }) => data.contract_id);
+      const contractAddress = await axios.get(`https://testnet.aeternity.io/v3/accounts/${ownerId}`).then(({ data }) => data.contract_id);
       const contractInstance = await client.getContractInstance({ source: CONTRACT_SOURCE, contractAddress });
 
-      const signers = (await contractInstance.methods.get_signers()).decodedResult;
       const version = (await contractInstance.methods.get_version()).decodedResult;
+      const signers = (await contractInstance.methods.get_signers()).decodedResult;
       const consensus = (await contractInstance.methods.get_consensus_info()).decodedResult;
 
       process.stdout.write('+');
@@ -63,6 +61,7 @@ const indexSigners = async (lastTxi = 0, url = `/v2/txs?scope=txi:${lastTxi}-${N
       });
     } catch (e) {
       // there will be cases that we check, but not of our contract, that then throw, ignore them
+      // console.error(txi, e.message);
       process.stdout.write('-');
     }
 
@@ -70,7 +69,7 @@ const indexSigners = async (lastTxi = 0, url = `/v2/txs?scope=txi:${lastTxi}-${N
     return acc;
   }, []);
 
-  if (next) await indexSigners(next);
+  if (next) await indexSigners(lastTxi, next);
 };
 
 const cleanDB = () => Signer.sync({ force: true });
