@@ -25,9 +25,18 @@ const nextTxi = () => {
   return Signer.findOne({ order: [['txi', 'DESC']] }).then((signer) => (signer ? signer.txi + 1 : 0));
 };
 
+let latestCheckedCursor = '';
+
 const indexSigners = async (lastTxi = 0, url = `/v2/txs?scope=txi:${lastTxi}-${Number.MAX_SAFE_INTEGER}&direction=forward&type=ga_attach&limit=10`) => {
-  console.log(lastTxi, url);
   const { data, next } = await axios.get(`${mdwBaseUrl}${url}`).then((res) => res.data);
+
+  const checkCursor = lastTxi + ';' + data.length + ';' + next;
+  console.log(latestCheckedCursor === checkCursor, checkCursor, latestCheckedCursor);
+  if (latestCheckedCursor === checkCursor) {
+    console.log('already checked', latestCheckedCursor);
+    return;
+  } else latestCheckedCursor = checkCursor;
+
   const owners = data
     .map((tx) => {
       // find transactions payfor with nested gaattach
@@ -45,11 +54,14 @@ const indexSigners = async (lastTxi = 0, url = `/v2/txs?scope=txi:${lastTxi}-${N
 
       const version = (await contractInstance.methods.get_version()).decodedResult;
       const signers = (await contractInstance.methods.get_signers()).decodedResult;
-      const consensus = (await contractInstance.methods.get_consensus_info()).decodedResult;
+      //const consensus = (await contractInstance.methods.get_consensus_info()).decodedResult;
 
       process.stdout.write('+');
 
-      await Signer.bulkCreate(signers.map((signer) => ({ signerId: signer, contractId: contractAddress, txi })));
+      await Signer.bulkCreate(
+        signers.map((signer) => ({ signerId: signer, contractId: contractAddress, txi })),
+        { ignoreDuplicates: true },
+      );
 
       acc.push({
         ownerId,
@@ -57,7 +69,7 @@ const indexSigners = async (lastTxi = 0, url = `/v2/txs?scope=txi:${lastTxi}-${N
         contractAddress,
         signers,
         version,
-        consensus,
+        //consensus,
       });
     } catch (e) {
       // there will be cases that we check, but not of our contract, that then throw, ignore them
