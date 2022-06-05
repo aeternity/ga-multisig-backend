@@ -17,7 +17,7 @@ const Signer = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    txi: {
+    height: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },

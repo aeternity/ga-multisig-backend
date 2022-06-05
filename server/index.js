@@ -1,21 +1,29 @@
 const cron = require('node-cron');
-const { indexSigners, initClient, cleanDB, nextTxi } = require('./logic');
+const { indexSigners, initClient, cleanDB, nextHeight, initWebsocket } = require('./logic');
 const express = require('express');
 const Signer = require('./Signer');
 
-let running = false;
+let running = true;
+
+const sync = (height) => {
+  return indexSigners(height)
+    .then(() => (running = false))
+    .catch(() => (running = false));
+};
 
 const start = async () => {
   //await cleanDB();
   await initClient();
-  const txi = await nextTxi();
 
-  cron.schedule('* * * * *', () => {
+  // sync first, then init websocket
+  await sync(await nextHeight());
+  await initWebsocket();
+
+  // sync periodically to ensure latest info
+  cron.schedule('* * * * *', async () => {
     if (!running) {
       running = true;
-      indexSigners(txi)
-        .then(() => (running = false))
-        .catch(() => (running = false));
+      await sync(await nextHeight());
     } else console.log('already running');
   });
 
