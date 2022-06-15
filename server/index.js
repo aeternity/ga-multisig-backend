@@ -30,6 +30,13 @@ const start = async () => {
   const app = express();
   const port = 3000;
 
+  app.use( (req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET');
+    next();
+  });
+
+
   app.get('/:signerId', async (req, res) => {
     res.send(await Signer.findAll({ where: { signerId: req.params.signerId } }));
   });
