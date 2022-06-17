@@ -2,6 +2,7 @@ const cron = require('node-cron');
 const { indexSigners, initClient, cleanDB, nextHeight, initWebsocket } = require('./logic');
 const express = require('express');
 const Signer = require('./Signer');
+const { Op } = require('sequelize');
 
 let running = true;
 
@@ -30,15 +31,23 @@ const start = async () => {
   const app = express();
   const port = 3000;
 
-  app.use( (req, res, next) => {
+  app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET');
     next();
   });
 
-
   app.get('/:signerId', async (req, res) => {
-    res.send(await Signer.findAll({ where: { signerId: req.params.signerId } }));
+    let fromHeight = req.query.fromHeight;
+
+    res.send(
+      await Signer.findAll({
+        where: {
+          ...(fromHeight ? { height: { [Op.gte]: fromHeight } } : {}),
+          signerId: req.params.signerId,
+        },
+      }),
+    );
   });
 
   app.get('/', async (req, res) => {

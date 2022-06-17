@@ -17,6 +17,10 @@ const Signer = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    gaAccountId: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     height: {
       type: DataTypes.INTEGER,
       allowNull: false,
