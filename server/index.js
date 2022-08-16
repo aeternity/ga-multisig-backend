@@ -59,7 +59,7 @@ const start = async () => {
   });
 
   app.get('/tx/:hash', async (req, res) => {
-    const tx = await Tx.findOne({ hash: req.params.hash });
+    const tx = await Tx.findOne({ where: { hash: req.params.hash } });
     if (tx) res.send(tx);
     else res.sendStatus(404);
   });
