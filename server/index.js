@@ -2,6 +2,7 @@ const cron = require('node-cron');
 const { indexSigners, initClient, cleanDB, nextHeight, initWebsocket } = require('./logic');
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const Signer = require('./Signer');
 const { Op } = require('sequelize');
@@ -42,12 +43,8 @@ const start = async () => {
   const app = express();
   const port = 3000;
 
+  app.use(cors());
   app.use(bodyParser.json());
-  app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET');
-    next();
-  });
 
   app.post('/tx', async (req, res) => {
     await Tx.create({ hash: req.body.hash, data: req.body.data })
