@@ -1,8 +1,8 @@
 const axios = require('axios');
 const WebSocket = require('ws');
 const { Universal, Node } = require('@aeternity/aepp-sdk');
-const Signer = require('./Signer');
-const Tx = require("./Tx");
+const Signer = require('./db/Signer');
+const Tx = require('./db/Tx');
 
 const CONTRACT_SOURCE = require('ga-multisig-contract/SimpleGAMultiSig.aes');
 
@@ -112,13 +112,19 @@ const indexSigners = async (height = 0, url = `/v2/txs?scope=gen:${height}-${Num
   if (next) await indexSigners(height, next);
 };
 
+const createDBIfNotExists = async () => {
+  await Signer.sync();
+  await Tx.sync();
+};
+
 const cleanDB = async () => {
-  await Signer.sync({force: true});
-  await Tx.sync({force: true});
-}
+  await Signer.sync({ force: true });
+  await Tx.sync({ force: true });
+};
 
 module.exports = {
   cleanDB,
+  createDBIfNotExists,
   indexSigners,
   nextHeight,
   initClient,

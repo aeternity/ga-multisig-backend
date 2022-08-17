@@ -1,12 +1,12 @@
 const cron = require('node-cron');
-const { indexSigners, initClient, cleanDB, nextHeight, initWebsocket } = require('./logic');
+const { indexSigners, initClient, nextHeight, initWebsocket, createDBIfNotExists } = require('./logic');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-const Signer = require('./Signer');
+const Signer = require('./db/Signer');
 const { Op } = require('sequelize');
-const Tx = require('./Tx');
+const Tx = require('./db/Tx');
 
 let running = true;
 
@@ -25,6 +25,7 @@ const sync = (height) => {
 };
 
 const start = async () => {
+  await createDBIfNotExists();
   //await cleanDB();
   await initClient();
 

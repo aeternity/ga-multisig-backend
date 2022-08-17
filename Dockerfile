@@ -11,4 +11,4 @@ RUN yarn
 COPY . .
 
 EXPOSE 3000
-CMD [ "node", "index.js" ]
+CMD [ "node", "src/index.js" ]

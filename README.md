@@ -7,11 +7,13 @@ This is the optional backend for ux optimization to use the [ga-multisig-ui](htt
 Clone repo via git or use the template button above.
 
 Install the dependencies
+
 ```
 yarn install
 ```
 
 Run backend
+
 ```
 yarn run server
 ```

@@ -2,7 +2,7 @@
   "name": "multisig-user-demo-server",
   "version": "0.1.0",
   "scripts": {
-    "server": "node index.js"
+    "server": "node src/index.js"
   },
   "dependencies": {
     "@aeternity/aepp-sdk": "^11.0.1",
