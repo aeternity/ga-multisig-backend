@@ -57,7 +57,7 @@ function filterTx(tx) {
 }
 
 async function indexContract(ownerId, height) {
-  const contractAddress = await axios.get(`https://testnet.aeternity.io/v3/accounts/${ownerId}`).then(({ data }) => data.contract_id);
+  const contractAddress = await client.getAccount(ownerId).then(({ contractId }) => contractId);
   const contractInstance = await client.getContractInstance({ source: CONTRACT_SOURCE, contractAddress });
 
   const version = (await contractInstance.methods.get_version()).decodedResult;
@@ -78,7 +78,7 @@ const indexSigners = async (height = 0, url = `/v2/txs?scope=gen:${height}-${Num
   const { data, next } = await axios.get(`${mdwBaseUrl}${url}`).then((res) => res.data);
 
   const checkCursor = height + ';' + data.length + ';' + next;
-  console.log(latestCheckedCursor === checkCursor, checkCursor, latestCheckedCursor);
+  //console.log(latestCheckedCursor === checkCursor, checkCursor, latestCheckedCursor);
   if (latestCheckedCursor === checkCursor) {
     console.log('already checked', latestCheckedCursor);
     return;
@@ -101,7 +101,7 @@ const indexSigners = async (height = 0, url = `/v2/txs?scope=gen:${height}-${Num
       });
     } catch (e) {
       // there will be cases that we check, but not of our contract, that then throw, ignore them
-      // console.error(txi, e.message);
+      console.error(ownerId, e.message);
       process.stdout.write('-');
     }
 
@@ -109,6 +109,7 @@ const indexSigners = async (height = 0, url = `/v2/txs?scope=gen:${height}-${Num
     return acc;
   }, []);
 
+  console.log('next', next);
   if (next) await indexSigners(height, next);
 };
 

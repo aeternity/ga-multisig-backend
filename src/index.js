@@ -19,9 +19,13 @@ process.on('uncaughtException', (e) => {
 });
 
 const sync = (height) => {
+  console.log('starting sync from', height)
   return indexSigners(height)
     .then(() => (running = false))
-    .catch(() => (running = false));
+    .catch((e) => {
+      console.error(e)
+      running = false
+    });
 };
 
 const start = async () => {
