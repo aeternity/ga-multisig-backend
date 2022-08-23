@@ -552,9 +552,9 @@ function-bind@^1.1.1:
   resolved "https://registry.npmjs.org/function-bind/-/function-bind-1.1.1.tgz"
   integrity sha512-yIovAzMX49sF8Yl58fSCWJ5svSLuaibPxXQJFLmBObTuCr0Mf1KiPopGM9NiFjiYBCbfaa2Fh6breQ6ANVTI0A==
 
-"ga-multisig-contract@github:aeternity/ga-multisig-contract":
+"ga-multisig-contract@github:aeternity/ga-multisig-contract#02831f1fe0818d4b5c6edb342aea252479df028b":
   version "1.0.0"
-  resolved "git+ssh://git@github.com/aeternity/ga-multisig-contract.git#02831f1fe0818d4b5c6edb342aea252479df028b"
+  resolved "https://codeload.github.com/aeternity/ga-multisig-contract/tar.gz/02831f1fe0818d4b5c6edb342aea252479df028b"
   dependencies:
     "@aeternity/aepp-sdk" "^12.1.1"
 
