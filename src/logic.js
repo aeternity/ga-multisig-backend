@@ -1,6 +1,6 @@
 const axios = require('axios');
 const WebSocket = require('ws');
-const { Universal, Node } = require('@aeternity/aepp-sdk');
+const { AeSdk, Node } = require('@aeternity/aepp-sdk');
 const Signer = require('./db/Signer');
 const Tx = require('./db/Tx');
 
@@ -32,12 +32,12 @@ const initWebsocket = () => {
 
 const initClient = async () => {
   if (!client) {
-    client = await Universal({
+    client = new AeSdk({
       compilerUrl: 'https://compiler.aepps.com',
       nodes: [
         {
           name: 'node',
-          instance: await Node({ url: 'https://testnet.aeternity.io/' }),
+          instance: new Node('https://testnet.aeternity.io/'),
         },
       ],
     });
