@@ -12,7 +12,7 @@ console.log("PG_HOST", process.env.PG_HOST)
 console.log("PG_PORT", process.env.PG_PORT)
 console.log("PG_DB", process.env.PG_DB)
 
-const sequelize = new Sequelize(`postgres://${process.env.PG_USER}:${process.env.PG_PASSWORD}@${process.env.PG_HOST}:${process.env.PG_PORT}/${process.env.PG_DB}`);
+const sequelize = new Sequelize(`postgres://${process.env.PG_USER}:${encodeURIComponent(process.env.PG_PASSWORD)}@${process.env.PG_HOST}:${process.env.PG_PORT}/${process.env.PG_DB}`);
 
 module.exports = {
   sequelize,
