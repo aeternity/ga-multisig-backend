@@ -3,7 +3,7 @@ name: Production GA Multisig Backend Pipeline
 on:
   push:
     branches:
-      - master
+      - main
   release:
     types: [created]
 
@@ -68,9 +68,9 @@ jobs:
         with:
           images: aeternitybot/ga-multisig-backend
           tags: |
-            type=raw,value=latest,enable=${{ endsWith(GitHub.ref, 'master') }}
-            type=raw,value=master,enable=${{ endsWith(GitHub.ref, 'master') }}
-            type=raw,value=${{ steps.release.outputs.tag_name }},enable=${{ endsWith(GitHub.ref, 'master') }}
+            type=raw,value=latest,enable=${{ endsWith(GitHub.ref, 'main') }}
+            type=raw,value=main,enable=${{ endsWith(GitHub.ref, 'main') }}
+            type=raw,value=${{ steps.release.outputs.tag_name }},enable=${{ endsWith(GitHub.ref, 'main') }}
             type=ref,event=tag
             type=ref,event=pr
 
@@ -112,12 +112,12 @@ jobs:
           env: ${{ env.ENV }}
           app: ${{ env.APP }}
       
-      - name: Latest Master Deploy on Push
+      - name: Latest main Deploy on Push
         if: github.event_name == 'push'
         uses: aeternity/ae-github-actions/argocd-pr-sync@v4
         with:
           git-sha: ${{ steps.git-sha.outputs.git-sha }}
-          url-prefix: master
+          url-prefix: main
           env: ${{ env.ENV }}
           app: ${{ env.APP }}
 
