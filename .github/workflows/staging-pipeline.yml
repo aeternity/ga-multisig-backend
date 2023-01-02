@@ -59,7 +59,7 @@ jobs:
         id: git-sha
         shell: bash
         run: |
-          echo "::set-output name=git-sha::$(git rev-parse --short HEAD)"
+          echo GIT_SHA=$(git rev-parse --short HEAD) >> $GITHUB_OUTPUT
       
       - name: Build and push docker image
         if: github.event_name == 'pull_request' && github.event.action == 'opened' || github.event.action == 'synchronize'
@@ -71,9 +71,6 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=local,src=/tmp/.buildx-cache
-          # Note the mode=max here
-          # More: https://github.com/moby/buildkit#--export-cache-options
-          # And: https://github.com/docker/buildx#--cache-tonametypetypekeyvalue
           cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-new
 
       - name: Move cache
@@ -93,7 +90,7 @@ jobs:
         if: github.event_name == 'pull_request' && github.event.action == 'synchronize'
         uses: aeternity/ae-github-actions/argocd-pr-sync@v6
         with:
-          git-sha: ${{ steps.git-sha.outputs.git-sha }}
+          git-sha: ${{ steps.git-sha.outputs.GIT_SHA }}
           url-prefix: pr-${{ env.PR_NUMBER }}
           env: ${{ env.ENV }}
           app: ${{ env.APP }}
