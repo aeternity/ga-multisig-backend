@@ -47,7 +47,7 @@ const start = async () => {
     });
   }
 
-  initialize();
+  void initialize();
 
   const app = express();
   const port = 3000;
