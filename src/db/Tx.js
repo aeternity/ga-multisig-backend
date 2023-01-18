@@ -12,7 +12,7 @@ const Tx = sequelize.define('Tx', {
     allowNull: false,
     unique: true,
   },
-  data: {
+  tx: {
     type: DataTypes.STRING,
     allowNull: false,
   },

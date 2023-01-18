@@ -1,14 +1,17 @@
 const WebSocket = require('ws');
-const { AeSdk, Node } = require('@aeternity/aepp-sdk');
+const { AeSdk, Node, unpackTx, buildAuthTxHash } = require('@aeternity/aepp-sdk');
 const Signer = require('./db/Signer');
 const Tx = require('./db/Tx');
 
 const CONTRACT_ACI = require('./contractAci.json');
+const { Buffer } = require('buffer');
+const { TxUnpackFailedError, TxHashNotMatchingError, HashAlreadyExistentError } = require('./util');
 
 if (!process.env.MIDDLEWARE_URL) throw new Error('MIDDLEWARE_URL Environment Missing');
 if (process.env.MIDDLEWARE_URL.match(/\/$/)) throw new Error('MIDDLEWARE_URL can not end with a trailing slash');
 if (!process.env.NODE_URL) throw new Error('NODE_URL Environment Missing');
 
+let node = new Node(process.env.NODE_URL);
 let client = null;
 
 const initWebsocket = () => {
@@ -38,7 +41,7 @@ const initClient = async () => {
       nodes: [
         {
           name: 'node',
-          instance: new Node(process.env.NODE_URL),
+          instance: node,
         },
       ],
     });
@@ -124,6 +127,22 @@ const cleanDB = async () => {
   await Tx.sync({ force: true });
 };
 
+const createTransaction = async (hash, tx) => {
+  try {
+    unpackTx(tx);
+  } catch (e) {
+    console.error(e);
+    throw new TxUnpackFailedError();
+  }
+
+  const computedHash = Buffer.from(await buildAuthTxHash(tx, { onNode: node })).toString('hex');
+  if (computedHash !== hash) throw new TxHashNotMatchingError();
+  return Tx.create({ hash, tx }).catch((e) => {
+    if (e.errors?.some((e) => e.validatorKey === 'not_unique')) throw new HashAlreadyExistentError();
+    else throw e;
+  });
+};
+
 module.exports = {
   cleanDB,
   createDBIfNotExists,
@@ -131,4 +150,5 @@ module.exports = {
   nextHeight,
   initClient,
   initWebsocket,
+  createTransaction,
 };
