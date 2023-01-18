@@ -1,12 +1,12 @@
-FROM node:lts-alpine
+FROM node:18-alpine
 
 # Create app directory
 WORKDIR /app
 
 COPY package.json .
-COPY yarn.lock .
+COPY package-lock.json .
 
-RUN yarn
+RUN npm i --omit=dev
 
 COPY . .
 

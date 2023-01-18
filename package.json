@@ -1,24 +1,26 @@
 {
-  "name": "multisig-user-demo-server",
+  "name": "ga-multisig-backend",
   "version": "0.1.0",
   "scripts": {
     "server": "node -r dotenv/config src/index.js"
   },
+  "engines" : {
+    "node" : ">=18.0.0"
+  },
   "dependencies": {
     "@aeternity/aepp-sdk": "^12.1.3",
-    "axios": "^1.2.2",
     "body-parser": "^1.20.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "ga-multisig-contract": "github:aeternity/ga-multisig-contract#02831f1fe0818d4b5c6edb342aea252479df028b",
+    "ga-multisig-contract": "git+https://git@github.com/aeternity/ga-multisig-contract#035aebd8849722fa992703a33eab15a3f15c39b1",
     "node-cron": "^3.0.2",
     "pg": "^8.8.0",
     "sequelize": "^6.28.0",
     "ws": "^8.12.0"
   },
   "devDependencies": {
-    "prettier": "^2.8.2"
+    "prettier": "^2.8.3"
   },
   "license": "ISC"
 }
