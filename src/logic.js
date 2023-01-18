@@ -1,4 +1,3 @@
-const axios = require('axios');
 const WebSocket = require('ws');
 const { AeSdk, Node } = require('@aeternity/aepp-sdk');
 const Signer = require('./db/Signer');
@@ -6,11 +5,12 @@ const Tx = require('./db/Tx');
 
 const CONTRACT_SOURCE = require('ga-multisig-contract/SimpleGAMultiSig.aes');
 
-const mdwBaseUrl = 'https://testnet.aeternity.io/mdw';
+if (!process.env.MIDDLEWARE_URL) throw new Error('MIDDLEWARE_URL Environment Missing');
+if (process.env.MIDDLEWARE_URL.match(/\/$/)) throw new Error('MIDDLEWARE_URL can not end with a trailing slash');
 let client = null;
 
 const initWebsocket = () => {
-  const ws = new WebSocket(mdwBaseUrl.replace('https', 'wss') + '/websocket');
+  const ws = new WebSocket(process.env.MIDDLEWARE_URL.replace('https', 'wss') + '/websocket');
 
   ws.on('open', function open() {
     ws.send('{"op":"Subscribe", "payload": "Transactions"}');
@@ -75,7 +75,7 @@ async function indexContract(ownerId, height) {
 }
 
 const indexSigners = async (height = 0, url = `/v2/txs?scope=gen:${height}-${Number.MAX_SAFE_INTEGER}&direction=forward&type=ga_attach&limit=10`) => {
-  const { data, next } = await axios.get(`${mdwBaseUrl}${url}`).then((res) => res.data);
+  const { data, next } = await fetch(`${process.env.MIDDLEWARE_URL}${url}`).then((res) => res.json());
 
   const checkCursor = height + ';' + data.length + ';' + next;
   //console.log(latestCheckedCursor === checkCursor, checkCursor, latestCheckedCursor);
