@@ -13,7 +13,6 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "ga-multisig-contract": "git+https://git@github.com/aeternity/ga-multisig-contract#035aebd8849722fa992703a33eab15a3f15c39b1",
     "node-cron": "^3.0.2",
     "pg": "^8.8.0",
     "sequelize": "^6.28.0",

@@ -3,10 +3,12 @@ const { AeSdk, Node } = require('@aeternity/aepp-sdk');
 const Signer = require('./db/Signer');
 const Tx = require('./db/Tx');
 
-const CONTRACT_SOURCE = require('ga-multisig-contract/SimpleGAMultiSig.aes');
+const CONTRACT_ACI = require('./contractAci.json');
 
 if (!process.env.MIDDLEWARE_URL) throw new Error('MIDDLEWARE_URL Environment Missing');
 if (process.env.MIDDLEWARE_URL.match(/\/$/)) throw new Error('MIDDLEWARE_URL can not end with a trailing slash');
+if (!process.env.NODE_URL) throw new Error('NODE_URL Environment Missing');
+
 let client = null;
 
 const initWebsocket = () => {
@@ -33,11 +35,10 @@ const initWebsocket = () => {
 const initClient = async () => {
   if (!client) {
     client = new AeSdk({
-      compilerUrl: 'https://compiler.aepps.com',
       nodes: [
         {
           name: 'node',
-          instance: new Node('https://testnet.aeternity.io/'),
+          instance: new Node(process.env.NODE_URL),
         },
       ],
     });
@@ -58,7 +59,7 @@ function filterTx(tx) {
 
 async function indexContract(ownerId, height) {
   const contractAddress = await client.getAccount(ownerId).then(({ contractId }) => contractId);
-  const contractInstance = await client.getContractInstance({ source: CONTRACT_SOURCE, contractAddress });
+  const contractInstance = await client.getContractInstance({ aci: CONTRACT_ACI, contractAddress });
 
   const version = (await contractInstance.methods.get_version()).decodedResult;
   const signers = (await contractInstance.methods.get_signers()).decodedResult;
