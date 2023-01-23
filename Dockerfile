@@ -11,4 +11,4 @@ RUN npm i --omit=dev
 COPY . .
 
 EXPOSE 3000
-CMD [ "npm", "run", "server" ]
+CMD [ "npm", "run", "server:dockerenv" ]
