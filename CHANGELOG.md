@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/aeternity/ga-multisig-backend/compare/v1.0.0...v1.0.1) (2023-01-23)
+
+
+### Miscellaneous
+
+* fix docker run command ([65ac790](https://github.com/aeternity/ga-multisig-backend/commit/65ac790961b87c54375611a6e91b3ddbc04f1bc3))
+
 ## 1.0.0 (2023-01-18)
 
 
