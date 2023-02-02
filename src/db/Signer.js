@@ -25,6 +25,10 @@ const Signer = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    version: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
   },
   {
     indexes: [
