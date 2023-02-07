@@ -10,6 +10,8 @@ env:
   ENV: "stg"
   APP: "ga-multisig-backend-mainnet"
 
+concurrency: multisig_staging_environment
+
 jobs:
   main:
     runs-on: ubuntu-latest    
