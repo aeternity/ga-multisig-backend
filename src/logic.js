@@ -15,7 +15,7 @@ let node = new Node(process.env.NODE_URL);
 let client = null;
 
 const initWebsocket = () => {
-  const ws = new WebSocket(process.env.MIDDLEWARE_URL.replace('https', 'wss') + '/websocket');
+  const ws = new WebSocket(process.env.MIDDLEWARE_URL.replace('https', 'wss') + '/v2/websocket');
 
   ws.on('open', function open() {
     ws.send('{"op":"Subscribe", "payload": "Transactions"}');
@@ -25,7 +25,7 @@ const initWebsocket = () => {
 
   ws.on('message', async (data) => {
     const json = JSON.parse(data);
-    if (json.payload && filterTx(json.payload)) {
+    if (json.payload && json.source === 'mdw' && filterTx(json.payload)) {
       const { ownerId, height } = filterTx(json.payload);
 
       // wait a bit for contract to be available, can be improved
