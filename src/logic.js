@@ -71,7 +71,7 @@ async function indexContract(ownerId, height) {
   process.stdout.write('+');
 
   await Signer.bulkCreate(
-    signers.map((signer) => ({ signerId: signer, contractId: contractAddress, height: height, gaAccountId: ownerId })),
+    signers.map((signer) => ({ signerId: signer, contractId: contractAddress, height: height, gaAccountId: ownerId, version })),
     { ignoreDuplicates: true },
   );
 

@@ -8,7 +8,7 @@ on:
 env:
   PR_NUMBER: ${{ github.event.pull_request.number }}
   ENV: "stg"
-  APP: "ga-multisig-backend"
+  APP: "ga-multisig-backend-mainnet"
 
 jobs:
   main:

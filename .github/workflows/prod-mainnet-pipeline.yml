@@ -9,7 +9,7 @@ on:
 
 env:
   ENV: "prd"
-  APP: "ga-multisig-backend"
+  APP: "ga-multisig-backend-mainnet"
 
 jobs:
   main:
