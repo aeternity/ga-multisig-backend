@@ -2,13 +2,13 @@ name: Staging GA Multisig Backend Pipeline
 
 on:
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
     types: [ opened, synchronize, closed ]
 
 env:
   PR_NUMBER: ${{ github.event.pull_request.number }}
   ENV: "stg"
-  APP: "ga-multisig-backend"
+  APP: "ga-multisig-backend-mainnet"
 
 jobs:
   main:
@@ -50,7 +50,7 @@ jobs:
         with:
           images: aeternity/ga-multisig-backend
           tags: |
-            type=raw,value=latest,enable=${{ endsWith(GitHub.ref, 'master') }}
+            type=raw,value=latest,enable=${{ endsWith(GitHub.ref, 'main') }}
             type=ref,event=tag
             type=ref,event=pr
       
@@ -86,6 +86,12 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
       
+      - name: Check the initial PR deployment status before make a PR Sync.
+        if: github.event_name == 'pull_request' && github.event.action == 'synchronize'
+        uses: aeternity/ae-github-actions/deploy-status@v7
+        with:
+          url: https://pr-${{ env.PR_NUMBER }}-${{ env.APP }}.${{ env.ENV }}.aepps.com
+
       - name: Staging PR Sync
         if: github.event_name == 'pull_request' && github.event.action == 'synchronize'
         uses: aeternity/ae-github-actions/argocd-pr-sync@v6
