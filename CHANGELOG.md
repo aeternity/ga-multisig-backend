@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.1.0](https://github.com/aeternity/ga-multisig-backend/compare/v1.0.1...v1.1.0) (2023-02-07)
+
+
+### Features
+
+* add contract version to signer response ([1c9abf1](https://github.com/aeternity/ga-multisig-backend/commit/1c9abf18675bc5cccf0572e614287ecadc0bf258))
+
+
+### CI / CD
+
+* change branch for stg pipelines ([3abe1ca](https://github.com/aeternity/ga-multisig-backend/commit/3abe1ca53ad4b3d05be112c77fcc0c556300b8c7))
+* check pr deployment state before sync ([f7272d7](https://github.com/aeternity/ga-multisig-backend/commit/f7272d75eb828228e3aad7567c5f1029ba938173))
+* fix typo ([c8f0f5c](https://github.com/aeternity/ga-multisig-backend/commit/c8f0f5c20f5a4bc6dce5923ead2c72d2ab72aa8e))
+* pipeline concurrency ([19c650a](https://github.com/aeternity/ga-multisig-backend/commit/19c650a951fb12d981f52d6199035ca994649798))
+* rebase with main ([6aea9e9](https://github.com/aeternity/ga-multisig-backend/commit/6aea9e998d461d3fc14e4350d97ca05124f5cc5a))
+
+
+### Miscellaneous
+
+* update mdw websocket usage, update aci ([7d4359e](https://github.com/aeternity/ga-multisig-backend/commit/7d4359e9f4baef65d80aeeff696ea86791215231))
+
 ## [1.0.1](https://github.com/aeternity/ga-multisig-backend/compare/v1.0.0...v1.0.1) (2023-01-23)
 
 
