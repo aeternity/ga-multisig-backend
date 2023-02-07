@@ -11,6 +11,8 @@ env:
   ENV: "prd"
   APP: "ga-multisig-backend-mainnet"
 
+concurrency: multisig_production_environment
+
 jobs:
   main:
     runs-on: ubuntu-latest
