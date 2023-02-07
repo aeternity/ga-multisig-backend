@@ -2,7 +2,7 @@ name: Staging GA Multisig Backend Pipeline
 
 on:
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
     types: [ opened, synchronize, closed ]
 
 env:
@@ -50,7 +50,7 @@ jobs:
         with:
           images: aeternity/ga-multisig-backend
           tags: |
-            type=raw,value=latest,enable=${{ endsWith(GitHub.ref, 'master') }}
+            type=raw,value=latest,enable=${{ endsWith(GitHub.ref, 'main') }}
             type=ref,event=tag
             type=ref,event=pr
       
