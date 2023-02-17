@@ -1,5 +1,5 @@
 const cron = require('node-cron');
-const { indexSigners, initClient, nextHeight, initWebsocket, createDBIfNotExists, createTransaction } = require('./logic');
+const { indexSigners, initClient, nextHeight, initWebsocketClient, createDBIfNotExists, createTransaction, initWebsocketServer } = require('./logic');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -38,7 +38,8 @@ const initialize = async () => {
 
   // sync first, then init websocket
   await sync(await nextHeight());
-  await initWebsocket();
+  await initWebsocketClient();
+  await initWebsocketServer();
 
   // sync periodically to ensure latest info
   cron.schedule('* * * * *', async () => {
