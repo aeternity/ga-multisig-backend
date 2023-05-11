@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.1](https://github.com/aeternity/ga-multisig-backend/compare/v1.1.0...v1.1.1) (2023-05-11)
+
+
+### Bug Fixes
+
+* update for changed scope filtering in mdw ([324e4b5](https://github.com/aeternity/ga-multisig-backend/commit/324e4b5dd0a9c9c0434b5f4295047b0ff4031d4e))
+
+
+### Miscellaneous
+
+* add migration to reset signers db ([eb5aa2d](https://github.com/aeternity/ga-multisig-backend/commit/eb5aa2d4998e360cfd9e5d6ca83a6a0e7b6c079d))
+
 ## [1.1.0](https://github.com/aeternity/ga-multisig-backend/compare/v1.0.1...v1.1.0) (2023-02-07)
 
 
