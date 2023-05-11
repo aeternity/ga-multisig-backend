@@ -78,7 +78,7 @@ async function indexContract(ownerId, height) {
   return { contractAddress, version, signers };
 }
 
-const indexSigners = async (height = 0, url = `/v2/txs?scope=gen:${height}-${Number.MAX_SAFE_INTEGER}&direction=forward&type=ga_attach&limit=10`) => {
+const indexSigners = async (height = 0, url = `/v2/txs?scope=gen:${height}-${Number.MAX_SAFE_INTEGER}&direction=forward&type=paying_for&limit=10`) => {
   const { data, next } = await fetch(`${process.env.MIDDLEWARE_URL}${url}`).then((res) => res.json());
 
   const checkCursor = height + ';' + data.length + ';' + next;
