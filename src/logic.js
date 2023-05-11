@@ -6,6 +6,7 @@ const Tx = require('./db/Tx');
 const CONTRACT_ACI = require('./contractAci.json');
 const { Buffer } = require('buffer');
 const { TxUnpackFailedError, TxHashNotMatchingError, HashAlreadyExistentError } = require('./util');
+const { migrate } = require('./db/migration');
 
 if (!process.env.MIDDLEWARE_URL) throw new Error('MIDDLEWARE_URL Environment Missing');
 if (process.env.MIDDLEWARE_URL.match(/\/$/)) throw new Error('MIDDLEWARE_URL can not end with a trailing slash');
@@ -120,6 +121,8 @@ const indexSigners = async (height = 0, url = `/v2/txs?scope=gen:${height}-${Num
 const createDBIfNotExists = async () => {
   await Signer.sync();
   await Tx.sync();
+
+  await migrate();
 };
 
 const cleanDB = async () => {
