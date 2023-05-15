@@ -63,10 +63,10 @@ function filterTx(tx) {
 
 async function indexContract(ownerId, height) {
   const contractAddress = await client.getAccount(ownerId).then(({ contractId }) => contractId);
-  const contractInstance = await client.getContractInstance({ aci: CONTRACT_ACI, contractAddress });
+  const contractInstance = await client.initializeContract({ aci: CONTRACT_ACI, address: contractAddress });
 
-  const version = (await contractInstance.methods.get_version()).decodedResult;
-  const signers = (await contractInstance.methods.get_signers()).decodedResult;
+  const version = (await contractInstance.get_version()).decodedResult;
+  const signers = (await contractInstance.get_signers()).decodedResult;
   //const consensus = (await contractInstance.methods.get_consensus_info()).decodedResult;
 
   process.stdout.write('+');

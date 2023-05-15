@@ -1,5 +1,63 @@
-{
-  "encodedAci": {
+[
+  {
+    "namespace": {
+      "name": "ListInternal",
+      "typedefs": []
+    }
+  },
+  {
+    "namespace": {
+      "name": "List",
+      "typedefs": []
+    }
+  },
+  {
+    "namespace": {
+      "name": "Option",
+      "typedefs": []
+    }
+  },
+  {
+    "namespace": {
+      "name": "Pair",
+      "typedefs": []
+    }
+  },
+  {
+    "namespace": {
+      "name": "Set",
+      "typedefs": [
+        {
+          "name": "set",
+          "typedef": {
+            "record": [
+              {
+                "name": "to_map",
+                "type": {
+                  "map": [
+                    "'a",
+                    "unit"
+                  ]
+                }
+              }
+            ]
+          },
+          "vars": [
+            {
+              "name": "'a"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "namespace": {
+      "name": "String",
+      "typedefs": []
+    }
+  },
+  {
     "contract": {
       "event": {
         "variant": [
@@ -264,7 +322,7 @@
           }
         ]
       },
-      "type_defs": [
+      "typedefs": [
         {
           "name": "transaction",
           "typedef": {
@@ -375,65 +433,5 @@
         }
       ]
     }
-  },
-  "externalEncodedAci": [
-    {
-      "namespace": {
-        "name": "ListInternal",
-        "type_defs": []
-      }
-    },
-    {
-      "namespace": {
-        "name": "List",
-        "type_defs": []
-      }
-    },
-    {
-      "namespace": {
-        "name": "Option",
-        "type_defs": []
-      }
-    },
-    {
-      "namespace": {
-        "name": "Pair",
-        "type_defs": []
-      }
-    },
-    {
-      "namespace": {
-        "name": "Set",
-        "type_defs": [
-          {
-            "name": "set",
-            "typedef": {
-              "record": [
-                {
-                  "name": "to_map",
-                  "type": {
-                    "map": [
-                      "'a",
-                      "unit"
-                    ]
-                  }
-                }
-              ]
-            },
-            "vars": [
-              {
-                "name": "'a"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "namespace": {
-        "name": "String",
-        "type_defs": []
-      }
-    }
-  ]
-}
+  }
+]
