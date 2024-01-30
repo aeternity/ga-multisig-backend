@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.2](https://github.com/aeternity/ga-multisig-backend/compare/v1.1.1...v1.1.2) (2023-11-19)
+
+
+### CI / CD
+
+* change gitops repo for stg ([200cfa6](https://github.com/aeternity/ga-multisig-backend/commit/200cfa6dd5f913b5d1dd371e25a518cdba16cbe0))
+
+
+### Miscellaneous
+
+* update sdk version ([1c590ef](https://github.com/aeternity/ga-multisig-backend/commit/1c590ef2ccea39474635b61bab8d00c98b1a8d2a))
+
 ## [1.1.1](https://github.com/aeternity/ga-multisig-backend/compare/v1.1.0...v1.1.1) (2023-05-11)
 
 
