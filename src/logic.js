@@ -8,6 +8,9 @@ const { Buffer } = require('buffer');
 const { TxUnpackFailedError, TxHashNotMatchingError, HashAlreadyExistentError } = require('./util');
 const { migrate } = require('./db/migration');
 
+// TODO: don't validate hash or accept fee, gasPrice provided by wallet
+const GA_META_PARAMS = { fee: 1e14, gasPrice: 1e9 };
+
 if (!process.env.MIDDLEWARE_URL) throw new Error('MIDDLEWARE_URL Environment Missing');
 if (process.env.MIDDLEWARE_URL.match(/\/$/)) throw new Error('MIDDLEWARE_URL can not end with a trailing slash');
 if (!process.env.NODE_URL) throw new Error('NODE_URL Environment Missing');
@@ -138,7 +141,9 @@ const createTransaction = async (hash, tx) => {
     throw new TxUnpackFailedError();
   }
 
-  const computedHash = Buffer.from(await buildAuthTxHash(tx, { onNode: node })).toString('hex');
+  const computedHash = (
+    await buildAuthTxHash(tx, { onNode: node, ...GA_META_PARAMS })
+  ).toString('hex');
   if (computedHash !== hash) throw new TxHashNotMatchingError();
   return Tx.create({ hash, tx }).catch((e) => {
     if (e.errors?.some((e) => e.validatorKey === 'not_unique')) throw new HashAlreadyExistentError();
