@@ -86,7 +86,6 @@ const indexSigners = async (height = 0, url = `/v2/txs?scope=gen:${height}-${Num
   const { data, next } = await fetch(`${process.env.MIDDLEWARE_URL}${url}`).then((res) => res.json());
 
   const checkCursor = height + ';' + data.length + ';' + next;
-  //console.log(latestCheckedCursor === checkCursor, checkCursor, latestCheckedCursor);
   if (latestCheckedCursor === checkCursor) {
     console.log('already checked', latestCheckedCursor);
     return;
