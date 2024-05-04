@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.3](https://github.com/aeternity/ga-multisig-backend/compare/v1.1.2...v1.1.3) (2024-05-04)
+
+
+### Miscellaneous
+
+* remove unnecessary comment ([d08847f](https://github.com/aeternity/ga-multisig-backend/commit/d08847f4fff115c84f433a0b0b83c0d0e1850eaa))
+
 ## [1.1.2](https://github.com/aeternity/ga-multisig-backend/compare/v1.1.1...v1.1.2) (2023-11-19)
 
 
