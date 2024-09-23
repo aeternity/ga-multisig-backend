@@ -5,7 +5,7 @@ const Tx = require('./db/Tx');
 
 const CONTRACT_ACI = require('./contractAci.json');
 const { Buffer } = require('buffer');
-const { TxUnpackFailedError, TxHashNotMatchingError, HashAlreadyExistentError } = require('./util');
+const { TxUnpackFailedError, TxHashNotMatchingError, HashAlreadyExistentError, logError } = require('./util');
 const { migrate } = require('./db/migration');
 
 // TODO: don't validate hash or accept fee, gasPrice provided by wallet
@@ -25,7 +25,7 @@ const initWebsocket = () => {
     ws.send('{"op":"Subscribe", "payload": "Transactions"}');
   });
 
-  ws.on('error', console.error);
+  ws.on('error', logError);
 
   ws.on('message', async (data) => {
     const json = JSON.parse(data);
@@ -83,7 +83,14 @@ async function indexContract(ownerId, height) {
 }
 
 const indexSigners = async (height = 0, url = `/v2/txs?scope=gen:${height}-${Number.MAX_SAFE_INTEGER}&direction=forward&type=paying_for&limit=10`) => {
-  const { data, next } = await fetch(`${process.env.MIDDLEWARE_URL}${url}`).then((res) => res.json());
+  let data;
+  let next;
+  try {
+    ({ data, next } = await (await fetch(`${process.env.MIDDLEWARE_URL}${url}`)).json());
+  } catch (e) {
+    logError('indexSigners[fetchFromMiddleware]', url, e);
+    throw e;
+  }
 
   const checkCursor = height + ';' + data.length + ';' + next;
   if (latestCheckedCursor === checkCursor) {
@@ -108,7 +115,7 @@ const indexSigners = async (height = 0, url = `/v2/txs?scope=gen:${height}-${Num
       });
     } catch (e) {
       // there will be cases that we check, but not of our contract, that then throw, ignore them
-      console.error(ownerId, e.message);
+      logError('indexSigners[indexContract]', ownerId, e.message);
       process.stdout.write('-');
     }
 
@@ -136,14 +143,18 @@ const createTransaction = async (hash, tx) => {
   try {
     unpackTx(tx);
   } catch (e) {
-    console.error(e);
+    logError('createTransaction[unpackTx]', tx, hash, e);
     throw new TxUnpackFailedError();
   }
-
-  const computedHash = (
-    await buildAuthTxHash(tx, { onNode: node, ...GA_META_PARAMS })
-  ).toString('hex');
-  if (computedHash !== hash) throw new TxHashNotMatchingError();
+  try {
+    const computedHash = (
+      await buildAuthTxHash(tx, { onNode: node, ...GA_META_PARAMS })
+    ).toString('hex');
+    if (computedHash !== hash) throw new TxHashNotMatchingError();
+  } catch (e) {
+    logError('createTransaction[buildAuthTxHash]', e);
+    throw e;
+  }
   return Tx.create({ hash, tx }).catch((e) => {
     if (e.errors?.some((e) => e.validatorKey === 'not_unique')) throw new HashAlreadyExistentError();
     else throw e;

@@ -8,7 +8,7 @@ const Signer = require('./db/Signer');
 const { Op } = require('sequelize');
 const Tx = require('./db/Tx');
 const { isAddressValid } = require('@aeternity/aepp-sdk');
-const { TxUnpackFailedError, TxHashNotMatchingError, HashAlreadyExistentError } = require('./util');
+const { TxUnpackFailedError, TxHashNotMatchingError, HashAlreadyExistentError, logError } = require('./util');
 
 let running = true;
 let status = 'started';
@@ -26,7 +26,7 @@ const sync = (height) => {
   return indexSigners(height)
     .then(() => (running = false))
     .catch((e) => {
-      console.error(e);
+      logError(e);
       running = false;
     });
 };
@@ -78,7 +78,7 @@ const start = async () => {
           res.status(400);
           return res.json({ error: e.message });
         } else {
-          console.error(e);
+          logError(e);
           return res.sendStatus(500);
         }
       });
