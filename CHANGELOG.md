@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.4](https://github.com/aeternity/ga-multisig-backend/compare/v1.1.3...v1.1.4) (2024-10-23)
+
+
+### CI / CD
+
+* update gh actions versions ([a646791](https://github.com/aeternity/ga-multisig-backend/commit/a64679194fa267cdb5b54a0796af2503261c4674))
+
 ## [1.1.3](https://github.com/aeternity/ga-multisig-backend/compare/v1.1.2...v1.1.3) (2024-05-04)
 
 
