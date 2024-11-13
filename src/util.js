@@ -16,8 +16,14 @@ class TxHashNotMatchingError extends Error {
   }
 }
 
+function logError(...error) {
+  console.log('Error:\n');
+  console.error(...error);
+}
+
 module.exports = {
   HashAlreadyExistentError,
   TxUnpackFailedError,
   TxHashNotMatchingError,
+  logError,
 };
