@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.1.4](https://github.com/aeternity/ga-multisig-backend/compare/v1.1.3...v1.1.4) (2024-11-13)
+
+
+### CI / CD
+
+* change pr closed triggers ([1d41dbd](https://github.com/aeternity/ga-multisig-backend/commit/1d41dbd4c0a4972bcadbb98564ef763c1e7dac51))
+* update gh actions versions ([a646791](https://github.com/aeternity/ga-multisig-backend/commit/a64679194fa267cdb5b54a0796af2503261c4674))
+
+
+### Miscellaneous
+
+* improve error logging ([9e4e46c](https://github.com/aeternity/ga-multisig-backend/commit/9e4e46c535fc948c3ba0ee1c87264042826cf020))
+
 ## [1.1.3](https://github.com/aeternity/ga-multisig-backend/compare/v1.1.2...v1.1.3) (2024-05-04)
 
 
