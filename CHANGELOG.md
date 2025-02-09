@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.5](https://github.com/aeternity/ga-multisig-backend/compare/v1.1.4...v1.1.5) (2025-02-09)
+
+
+### CI / CD
+
+* fix gh action undeploy step triggers ([e7a34ec](https://github.com/aeternity/ga-multisig-backend/commit/e7a34ec41febd142174b6aa36d02f99cfa18cae8))
+* pipeline changes ([92b9ede](https://github.com/aeternity/ga-multisig-backend/commit/92b9eded151d08b954c20ab7e1e8f803fceabb0d))
+
 ## [1.1.4](https://github.com/aeternity/ga-multisig-backend/compare/v1.1.3...v1.1.4) (2024-11-13)
 
 
