@@ -122,6 +122,7 @@ jobs:
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
-          repository: aeternity/gitops-apps
+          repository: aeternity/gitops-apps-aelabs
           github_token: ${{ secrets.BOT_GITHUB_TOKEN }}
           branch: prd
+
