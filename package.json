@@ -1,6 +1,6 @@
 {
   "name": "ga-multisig-backend",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "scripts": {
     "server": "node -r dotenv/config src/index.js",
     "server:dockerenv": "node src/index.js"
