@@ -5,14 +5,17 @@ const { TxUnpackFailedError, TxHashNotMatchingError, HashAlreadyExistentError, I
 
 // The routes take their persistence and their chain access as parameters so that they can be
 // exercised without a database and without a node - see `test/app.test.js`.
-const createApp = ({ getStatus, createTransaction, findTx, findSigners }) => {
+const createApp = ({ getStatus, getLastProgress, maxProgressAge = 10 * 60 * 1000, createTransaction, findTx, findSigners }) => {
   const app = express();
 
   app.use(cors());
   app.use(express.json());
 
+  // 503 once the indexer stopped hearing back - see `lastProgressAt` in logic.js
   app.get('/health', (req, res) => {
-    res.json({ status: getStatus() });
+    const lastProgress = getLastProgress();
+    const stale = Date.now() - lastProgress > maxProgressAge;
+    res.status(stale ? 503 : 200).json({ status: getStatus(), lastProgress: new Date(lastProgress).toISOString() });
   });
 
   app.post('/tx', async (req, res) => {

@@ -18,6 +18,7 @@ const start = async (t, deps = {}) => {
 
   const server = createApp({
     getStatus: () => 'synced',
+    getLastProgress: () => Date.now(),
     createTransaction: record('createTransaction'),
     findTx: record('findTx', null),
     findSigners: record('findSigners', []),
@@ -42,12 +43,29 @@ const captureErrorLog = (t) => {
   return logged;
 };
 
-test('GET /health reports the sync status', async (t) => {
-  const app = await start(t, { getStatus: () => 'started' });
-  const res = await app.get('/health');
+test('GET /health', async (t) => {
+  await t.test('reports the sync status while the indexer is making progress', async (t) => {
+    const lastProgress = Date.now();
+    const app = await start(t, { getStatus: () => 'started', getLastProgress: () => lastProgress });
+    const res = await app.get('/health');
 
-  assert.equal(res.status, 200);
-  assert.deepEqual(await res.json(), { status: 'started' });
+    assert.equal(res.status, 200);
+    assert.deepEqual(await res.json(), { status: 'started', lastProgress: new Date(lastProgress).toISOString() });
+  });
+
+  await t.test('fails once the indexer has not made progress for too long', async (t) => {
+    const app = await start(t, { getLastProgress: () => Date.now() - 11 * 60 * 1000 });
+    const res = await app.get('/health');
+
+    assert.equal(res.status, 503);
+    assert.equal((await res.json()).status, 'synced');
+  });
+
+  await t.test('takes the age it accepts as a parameter', async (t) => {
+    const app = await start(t, { getLastProgress: () => Date.now() - 5000, maxProgressAge: 1000 });
+
+    assert.equal((await app.get('/health')).status, 503);
+  });
 });
 
 test('POST /tx', async (t) => {

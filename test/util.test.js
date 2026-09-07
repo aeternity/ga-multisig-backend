@@ -1,7 +1,45 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-const { parseGaMetaParams, InvalidGaMetaParamsError } = require('../src/util');
+const { parseGaMetaParams, isTransientError, positiveMsFromEnv, InvalidGaMetaParamsError } = require('../src/util');
+
+test('isTransientError', async (t) => {
+  await t.test('accepts what a later attempt can get past', () => {
+    const cases = [
+      Object.assign(new Error('timed out'), { name: 'AbortError' }),
+      Object.assign(new Error('timed out'), { name: 'TimeoutError' }),
+      Object.assign(new Error('socket hang up'), { code: 'ECONNRESET' }),
+      Object.assign(new Error('getaddrinfo'), { code: 'EAI_AGAIN' }),
+      Object.assign(new Error('node is unwell'), { statusCode: 503 }),
+      Object.assign(new Error('node is unwell'), { response: { status: 500 } }),
+      // fetch and the sdk report the network failure underneath a wrapper error
+      Object.assign(new Error('fetch failed'), { cause: Object.assign(new Error('connect'), { code: 'ECONNREFUSED' }) }),
+    ];
+
+    for (const e of cases) assert.equal(isTransientError(e), true, `${e.name}/${e.code ?? e.statusCode} should be retried`);
+  });
+
+  // the common case by far: a paying_for transaction that deployed a generalized account which is
+  // not one of our multisigs. Calling that transient would pin the watermark to its height.
+  await t.test('rejects what will fail the same way every time', () => {
+    const cases = [
+      undefined,
+      null,
+      new Error('Invalid contract address'),
+      Object.assign(new Error('not found'), { statusCode: 404 }),
+      Object.assign(new Error('bad request'), { response: { status: 400 } }),
+      new TypeError('cannot read properties of null'),
+    ];
+
+    for (const e of cases) assert.equal(isTransientError(e), false, `${e} should not be retried`);
+  });
+
+  await t.test('survives an error whose cause chain is circular', () => {
+    const e = new Error('a');
+    e.cause = e;
+    assert.equal(isTransientError(e), false);
+  });
+});
 
 test('parseGaMetaParams', async (t) => {
   await t.test('treats a request without either value as one that sends no params', () => {
@@ -40,5 +78,28 @@ test('parseGaMetaParams', async (t) => {
   await t.test('names the offending value', () => {
     assert.throws(() => parseGaMetaParams({ fee: 'x', gasPrice: '1' }), /^InvalidGaMetaParamsError: fee /);
     assert.throws(() => parseGaMetaParams({ fee: '1', gasPrice: 'x' }), /^InvalidGaMetaParamsError: gasPrice /);
+  });
+});
+
+test('positiveMsFromEnv', async (t) => {
+  t.after(() => delete process.env.PROBE_MS);
+
+  await t.test('is unset for a variable that is missing or empty', () => {
+    delete process.env.PROBE_MS;
+    assert.equal(positiveMsFromEnv('PROBE_MS'), undefined);
+    process.env.PROBE_MS = '';
+    assert.equal(positiveMsFromEnv('PROBE_MS'), undefined);
+  });
+
+  await t.test('parses a value in milliseconds', () => {
+    process.env.PROBE_MS = '1500';
+    assert.equal(positiveMsFromEnv('PROBE_MS'), 1500);
+  });
+
+  await t.test('refuses a value that is not a positive number', () => {
+    for (const value of ['abc', '0', '-1', 'NaN']) {
+      process.env.PROBE_MS = value;
+      assert.throws(() => positiveMsFromEnv('PROBE_MS'), /PROBE_MS has to be a positive number/, `${value} should be refused`);
+    }
   });
 });

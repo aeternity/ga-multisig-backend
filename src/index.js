@@ -1,11 +1,13 @@
 const cron = require('node-cron');
-const { indexSigners, initClient, nextHeight, initWebsocket, createDBIfNotExists, createTransaction } = require('./logic');
+const { indexSigners, initClient, nextHeight, getLastProgress, initWebsocket, createDBIfNotExists, createTransaction } = require('./logic');
 
 const Signer = require('./db/Signer');
 const { Op } = require('sequelize');
 const Tx = require('./db/Tx');
-const { logError } = require('./util');
+const { logError, positiveMsFromEnv } = require('./util');
 const { createApp } = require('./app');
+
+const maxProgressAge = positiveMsFromEnv('MAX_PROGRESS_AGE_MS');
 
 let running = true;
 let status = 'started';
@@ -51,6 +53,8 @@ const start = async () => {
   const port = 3000;
   const app = createApp({
     getStatus: () => status,
+    getLastProgress,
+    maxProgressAge,
     createTransaction,
     findTx: (hash) => Tx.findOne({ where: { hash } }),
     findSigners: ({ signerId, fromHeight }) =>
