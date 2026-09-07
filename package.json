@@ -3,7 +3,9 @@
   "version": "1.1.4",
   "scripts": {
     "server": "node -r dotenv/config src/index.js",
-    "server:dockerenv": "node src/index.js"
+    "server:dockerenv": "node src/index.js",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "engines": {
     "node": ">=20.19.0"
