@@ -1,22 +1,30 @@
 class HashAlreadyExistentError extends Error {
+  name = 'HashAlreadyExistentError';
+
   constructor() {
     super('hash already existent');
   }
 }
 
 class TxUnpackFailedError extends Error {
+  name = 'TxUnpackFailedError';
+
   constructor() {
     super('transaction unpack failed');
   }
 }
 
 class TxHashNotMatchingError extends Error {
+  name = 'TxHashNotMatchingError';
+
   constructor() {
     super('transaction not matching hash');
   }
 }
 
-class InvalidGaMetaParamsError extends Error {}
+class InvalidGaMetaParamsError extends Error {
+  name = 'InvalidGaMetaParamsError';
+}
 
 // Amounts in aettos are big enough to lose precision as a json number, so they are accepted as
 // decimal strings as well and kept as strings from here on.
