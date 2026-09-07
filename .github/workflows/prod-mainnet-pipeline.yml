@@ -8,8 +8,8 @@ on:
     types: [created]
 
 env:
-  ENV: "prd"
-  APP: "ga-multisig-backend-mainnet"
+  ENV: 'prd'
+  APP: 'ga-multisig-backend-mainnet'
 
 concurrency: multisig_production_environment
 
@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Production GA Multisig Backend Pipeline
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 100
 
@@ -27,7 +27,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: node
-          package-name: ""
+          package-name: ''
           changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"ci","section":"CI / CD","hidden":false},{"type":"test","section":"Testing","hidden":false},{"type":"refactor","section":"Refactorings","hidden":false},{"type":"chore","section":"Miscellaneous","hidden":false}]'
 
       - name: Set up Docker Buildx
@@ -37,7 +37,7 @@ jobs:
           install: true
 
       - name: Cache Docker layers
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-${{ env.ENV }}-buildx-${{ github.sha }}
@@ -49,7 +49,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_PASS }}
-      
+
       - name: Get commit sha on push
         if: github.event_name == 'push'
         id: git-sha
@@ -95,7 +95,7 @@ jobs:
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           repository: aeternity/gitops-apps.git
           ref: prd
@@ -109,7 +109,7 @@ jobs:
           url-prefix: ${{ steps.release.outputs.tag_name }}
           env: ${{ env.ENV }}
           app: ${{ env.APP }}
-      
+
       - name: Latest main Deploy on Push
         if: github.event_name == 'push'
         uses: aeternity/ae-github-actions/argocd-pr-sync@v4
@@ -125,4 +125,3 @@ jobs:
           repository: aeternity/gitops-apps-aelabs
           github_token: ${{ secrets.BOT_GITHUB_TOKEN }}
           branch: prd
-
