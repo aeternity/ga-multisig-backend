@@ -7,8 +7,8 @@ const cors = require('cors');
 const Signer = require('./db/Signer');
 const { Op } = require('sequelize');
 const Tx = require('./db/Tx');
-const { isAddressValid } = require('@aeternity/aepp-sdk');
-const { TxUnpackFailedError, TxHashNotMatchingError, HashAlreadyExistentError, logError } = require('./util');
+const { isEncoded, Encoding } = require('@aeternity/aepp-sdk');
+const { TxUnpackFailedError, TxHashNotMatchingError, HashAlreadyExistentError, InvalidGaMetaParamsError, parseGaMetaParams, logError } = require('./util');
 
 let running = true;
 let status = 'started';
@@ -68,7 +68,16 @@ const start = async () => {
       return res.json({ error: 'request body has to contain hash and tx' });
     }
 
-    return createTransaction(req.body.hash, req.body.tx)
+    let gaMetaParams;
+    try {
+      gaMetaParams = parseGaMetaParams(req.body);
+    } catch (e) {
+      if (!(e instanceof InvalidGaMetaParamsError)) throw e;
+      res.status(400);
+      return res.json({ error: e.message });
+    }
+
+    return createTransaction(req.body.hash, req.body.tx, gaMetaParams)
       .then(() => res.sendStatus(204))
       .catch((e) => {
         if (e instanceof HashAlreadyExistentError) {
@@ -96,7 +105,7 @@ const start = async () => {
   });
 
   app.get('/:signerId', async (req, res) => {
-    if (!req.params.signerId || !isAddressValid(req.params.signerId)) {
+    if (!req.params.signerId || !isEncoded(req.params.signerId, Encoding.AccountAddress)) {
       res.status(400);
       return res.json({ error: 'request has to be in format /:signerId and valid signer account' });
     }
