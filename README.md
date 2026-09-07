@@ -6,16 +6,26 @@ This is the optional backend for ux optimization to use the [ga-multisig-ui](htt
 
 Clone repo via git or use the template button above.
 
+Requires Node.js 20.19 or newer and a PostgreSQL database.
+
 Install the dependencies
 
 ```
-yarn install
+npm install
 ```
 
-Run backend
+Copy `.env_sample` to `.env` and point it at your database, the node and the middleware, then run
+the backend
 
 ```
-yarn run server
+npm run server
+```
+
+## Development
+
+```
+npm test           # unit and http tests, no database or node needed
+npm run format     # prettier
 ```
 
 ## Storing a transaction
