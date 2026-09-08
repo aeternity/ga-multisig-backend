@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:22-alpine
 
 # Create app directory
 WORKDIR /app
@@ -6,7 +6,7 @@ WORKDIR /app
 COPY package.json .
 COPY package-lock.json .
 
-RUN npm ci
+RUN npm ci --omit=dev
 
 COPY . .
 

@@ -2,25 +2,25 @@ name: Staging GA Multisig Backend Pipeline
 
 on:
   pull_request:
-    branches: [ main ]
-    types: [ opened, synchronize, closed ]
+    branches: [main]
+    types: [opened, synchronize, closed]
 
 env:
   PR_NUMBER: ${{ github.event.pull_request.number }}
-  ENV: "stg"
-  APP: "ga-multisig-backend-testnet"
+  ENV: 'stg'
+  APP: 'ga-multisig-backend-testnet'
 
 concurrency: multisig_staging_environment
 
 jobs:
   main:
-    runs-on: ubuntu-latest    
-    name: Staging GA Multisig Backend 
+    runs-on: ubuntu-latest
+    name: Staging GA Multisig Backend
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       - name: Set up Docker Buildx
         id: buildx
         # Use the action from the master, as we've seen some inconsistencies with @v1
@@ -55,14 +55,14 @@ jobs:
             type=raw,value=latest,enable=${{ endsWith(GitHub.ref, 'main') }}
             type=ref,event=tag
             type=ref,event=pr
-      
+
       - name: Get commit sha on PR Sync
-        if: github.event_name == 'pull_request' && github.event.action == 'synchronize'  
+        if: github.event_name == 'pull_request' && github.event.action == 'synchronize'
         id: git-sha
         shell: bash
         run: |
           echo GIT_SHA=$(git rev-parse --short HEAD) >> $GITHUB_OUTPUT
-      
+
       - name: Build and push docker image
         if: github.event_name == 'pull_request' && github.event.action == 'opened' || github.event.action == 'synchronize'
         uses: docker/build-push-action@v6.7.0
@@ -81,14 +81,14 @@ jobs:
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           repository: aeternity/gitops-apps-aelabs.git
           token: ${{ secrets.BOT_GITHUB_TOKEN }}
           ref: stg
           persist-credentials: false
           fetch-depth: 0
-      
+
       - name: Check the initial PR deployment status before make a PR Sync.
         continue-on-error: true
         if: github.event_name == 'pull_request' || github.event.action != 'synchronize' || github.event.action == 'opened' || github.event.action == 'reopened'
