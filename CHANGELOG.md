@@ -1,5 +1,87 @@
 # Changelog
 
+## [2.0.0](https://github.com/aeternity/ga-multisig-backend/compare/v1.1.6...v2.0.0) (2026-09-09)
+
+
+### ⚠ BREAKING CHANGES
+
+* rename db fields, improve error handling
+* use node-fetch, use npm, move mdw to env
+
+### Features
+
+* add contract version to signer response ([1c9abf1](https://github.com/aeternity/ga-multisig-backend/commit/1c9abf18675bc5cccf0572e614287ecadc0bf258))
+
+
+### Bug Fixes
+
+* derive the fallback pair from the gas price node reports ([445ef17](https://github.com/aeternity/ga-multisig-backend/commit/445ef1720bb9c3299dbdaba873206a333ba166e4))
+* recover from a node or middleware that stops answering ([e43a088](https://github.com/aeternity/ga-multisig-backend/commit/e43a088466d66aa1afbad34f1ac6787740dbc45b))
+* update for changed scope filtering in mdw ([324e4b5](https://github.com/aeternity/ga-multisig-backend/commit/324e4b5dd0a9c9c0434b5f4295047b0ff4031d4e))
+
+
+### CI / CD
+
+* **build:** add the gh action pipelines ([d5e44df](https://github.com/aeternity/ga-multisig-backend/commit/d5e44dfa46cd961bef02c5782863f5d0ca6cbc61))
+* **build:** patch-deprecated-gh-action-steps ([a322462](https://github.com/aeternity/ga-multisig-backend/commit/a32246237724d5cde666738bb2c16670c08ce4ec))
+* change branch for stg pipelines ([3abe1ca](https://github.com/aeternity/ga-multisig-backend/commit/3abe1ca53ad4b3d05be112c77fcc0c556300b8c7))
+* change gitops repo for stg ([200cfa6](https://github.com/aeternity/ga-multisig-backend/commit/200cfa6dd5f913b5d1dd371e25a518cdba16cbe0))
+* change image repository ([e0d634a](https://github.com/aeternity/ga-multisig-backend/commit/e0d634ab36bf3a70b3686e4df26db00843ab5721))
+* change pr closed triggers ([1d41dbd](https://github.com/aeternity/ga-multisig-backend/commit/1d41dbd4c0a4972bcadbb98564ef763c1e7dac51))
+* check pr deployment state before sync ([f7272d7](https://github.com/aeternity/ga-multisig-backend/commit/f7272d75eb828228e3aad7567c5f1029ba938173))
+* deploy prod from gitops-apps-aelabs ([9d7c58a](https://github.com/aeternity/ga-multisig-backend/commit/9d7c58a7679693077931ed1f0990fa4c59b8cb1f))
+* fix gh action undeploy step triggers ([e7a34ec](https://github.com/aeternity/ga-multisig-backend/commit/e7a34ec41febd142174b6aa36d02f99cfa18cae8))
+* fix main branch ([55d7c13](https://github.com/aeternity/ga-multisig-backend/commit/55d7c138f1febdb62c505984b185cba55ff7c25a))
+* fix typo ([c8f0f5c](https://github.com/aeternity/ga-multisig-backend/commit/c8f0f5c20f5a4bc6dce5923ead2c72d2ab72aa8e))
+* pipeline changes ([92b9ede](https://github.com/aeternity/ga-multisig-backend/commit/92b9eded151d08b954c20ab7e1e8f803fceabb0d))
+* pipeline concurrency ([19c650a](https://github.com/aeternity/ga-multisig-backend/commit/19c650a951fb12d981f52d6199035ca994649798))
+* rebase with main ([6aea9e9](https://github.com/aeternity/ga-multisig-backend/commit/6aea9e998d461d3fc14e4350d97ca05124f5cc5a))
+* rename pipelines ([e6b8079](https://github.com/aeternity/ga-multisig-backend/commit/e6b807962115840d0c6f8b67469423052bbc811e))
+* run the test suite on pull requests ([3c2749e](https://github.com/aeternity/ga-multisig-backend/commit/3c2749eda0c9920056b35ae3f764844a7c5f50cd))
+* update gh actions versions ([a646791](https://github.com/aeternity/ga-multisig-backend/commit/a64679194fa267cdb5b54a0796af2503261c4674))
+* use v6 version gh actions for all steps in stg ([2d930a9](https://github.com/aeternity/ga-multisig-backend/commit/2d930a9b4b6744c1108788c71ce8e9d900510889))
+
+
+### Testing
+
+* cover the auth hash check, the http layer and the input parsing ([43b50ba](https://github.com/aeternity/ga-multisig-backend/commit/43b50ba5d0bfa46b59ea6019dbe1814207e7fd8a))
+
+
+### Refactorings
+
+* remove compiler need ([70964f6](https://github.com/aeternity/ga-multisig-backend/commit/70964f67d6e24f1dd77bd0eb57e6e1b2f8092562))
+* split the http layer and the auth hash check into own modules ([5c0be7a](https://github.com/aeternity/ga-multisig-backend/commit/5c0be7a70ae395eb2ddeefd6dabebfe8f755be10))
+
+
+### Miscellaneous
+
+* add migration to reset signers db ([eb5aa2d](https://github.com/aeternity/ga-multisig-backend/commit/eb5aa2d4998e360cfd9e5d6ca83a6a0e7b6c079d))
+* add prettier scripts and format with prettier 3 ([a45a27c](https://github.com/aeternity/ga-multisig-backend/commit/a45a27cd9d2c00f05d222c9cbfd8b42004f8a6ae))
+* change repo for prod pipelines ([0483848](https://github.com/aeternity/ga-multisig-backend/commit/04838481390642dfda61b6785a0773ea7d9fade9))
+* **deps:** update dependencies and require node 20 ([cc0cfd0](https://github.com/aeternity/ga-multisig-backend/commit/cc0cfd0e775ec6853280d4e162d912bff5b02819))
+* fix docker run command ([65ac790](https://github.com/aeternity/ga-multisig-backend/commit/65ac790961b87c54375611a6e91b3ddbc04f1bc3))
+* improve error logging ([9e4e46c](https://github.com/aeternity/ga-multisig-backend/commit/9e4e46c535fc948c3ba0ee1c87264042826cf020))
+* **main:** release 1.0.0 ([a2dd257](https://github.com/aeternity/ga-multisig-backend/commit/a2dd25783d85f2e85add7a3cd9c4d135ca166e1d))
+* **main:** release 1.0.1 ([589f4c7](https://github.com/aeternity/ga-multisig-backend/commit/589f4c7c0b306e2d986bffa99d028b4668fb40ea))
+* **main:** release 1.1.0 ([9f7897b](https://github.com/aeternity/ga-multisig-backend/commit/9f7897ba9dba6781ad774a6795a683ab6b4acb46))
+* **main:** release 1.1.1 ([4c99f6a](https://github.com/aeternity/ga-multisig-backend/commit/4c99f6a34007fb417a3b28c554e880abfae29a8f))
+* **main:** release 1.1.2 ([f4c9684](https://github.com/aeternity/ga-multisig-backend/commit/f4c96842de8253a9e86223db6769a980ed798236))
+* **main:** release 1.1.3 ([e0fa44b](https://github.com/aeternity/ga-multisig-backend/commit/e0fa44b873f6cf2eed7f37df9621f299c6958c64))
+* **main:** release 1.1.4 ([85ba454](https://github.com/aeternity/ga-multisig-backend/commit/85ba45452b89ddf37460254523394bc4268d2c09))
+* **main:** release 1.1.5 ([48134aa](https://github.com/aeternity/ga-multisig-backend/commit/48134aa882a597e8512fe616d80efa3739f12b16))
+* **main:** release 1.1.6 ([44312ba](https://github.com/aeternity/ga-multisig-backend/commit/44312ba38cf5ff050f4149de0f526c24e3f8464a))
+* remove db dump ([13d5119](https://github.com/aeternity/ga-multisig-backend/commit/13d511913e0a0e89bf68b1b4f00025908d291a70))
+* remove unnecessary comment ([d08847f](https://github.com/aeternity/ga-multisig-backend/commit/d08847f4fff115c84f433a0b0b83c0d0e1850eaa))
+* rename db fields, improve error handling ([b2cc0e9](https://github.com/aeternity/ga-multisig-backend/commit/b2cc0e9455dd1db8cd54caef26defa09e6212fff))
+* update dependencies ([98da6ff](https://github.com/aeternity/ga-multisig-backend/commit/98da6ff999b2ad72085b974a05fd2deb04cfac4a))
+* update gh actions cache version ([d0cb02b](https://github.com/aeternity/ga-multisig-backend/commit/d0cb02b049f14f5f0284dbb469cd754111f7a990))
+* update gh actions events ([94ef674](https://github.com/aeternity/ga-multisig-backend/commit/94ef67449cde4b841303971fc74ad33cf3ca68d8))
+* update initial deploy check step ([a154dd1](https://github.com/aeternity/ga-multisig-backend/commit/a154dd1d793e7dcd38a2ea122b69faaf2b37a1ef))
+* update mdw websocket usage, update aci ([7d4359e](https://github.com/aeternity/ga-multisig-backend/commit/7d4359e9f4baef65d80aeeff696ea86791215231))
+* update sdk to 15.0.0 ([ecc27ea](https://github.com/aeternity/ga-multisig-backend/commit/ecc27eab6d17360e2c05c0915895c51fc14ef1f5))
+* update sdk version ([1c590ef](https://github.com/aeternity/ga-multisig-backend/commit/1c590ef2ccea39474635b61bab8d00c98b1a8d2a))
+* use node-fetch, use npm, move mdw to env ([e2f391f](https://github.com/aeternity/ga-multisig-backend/commit/e2f391f2c2a8ce0882325be0dff619f8d065541f))
+
 ## [1.1.6](https://github.com/aeternity/ga-multisig-backend/compare/v1.1.5...v1.1.6) (2026-09-09)
 
 
