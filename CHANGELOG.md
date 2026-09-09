@@ -1,5 +1,40 @@
 # Changelog
 
+## [1.1.5](https://github.com/aeternity/ga-multisig-backend/compare/v1.1.4...v1.1.5) (2026-09-08)
+
+
+### Bug Fixes
+
+* recover from a node or middleware that stops answering ([e43a088](https://github.com/aeternity/ga-multisig-backend/commit/e43a088466d66aa1afbad34f1ac6787740dbc45b))
+
+
+### CI / CD
+
+* fix gh action undeploy step triggers ([e7a34ec](https://github.com/aeternity/ga-multisig-backend/commit/e7a34ec41febd142174b6aa36d02f99cfa18cae8))
+* pipeline changes ([92b9ede](https://github.com/aeternity/ga-multisig-backend/commit/92b9eded151d08b954c20ab7e1e8f803fceabb0d))
+* run the test suite on pull requests ([3c2749e](https://github.com/aeternity/ga-multisig-backend/commit/3c2749eda0c9920056b35ae3f764844a7c5f50cd))
+
+
+### Testing
+
+* cover the auth hash check, the http layer and the input parsing ([43b50ba](https://github.com/aeternity/ga-multisig-backend/commit/43b50ba5d0bfa46b59ea6019dbe1814207e7fd8a))
+
+
+### Refactorings
+
+* split the http layer and the auth hash check into own modules ([5c0be7a](https://github.com/aeternity/ga-multisig-backend/commit/5c0be7a70ae395eb2ddeefd6dabebfe8f755be10))
+
+
+### Miscellaneous
+
+* add prettier scripts and format with prettier 3 ([a45a27c](https://github.com/aeternity/ga-multisig-backend/commit/a45a27cd9d2c00f05d222c9cbfd8b42004f8a6ae))
+* change repo for prod pipelines ([0483848](https://github.com/aeternity/ga-multisig-backend/commit/04838481390642dfda61b6785a0773ea7d9fade9))
+* **deps:** update dependencies and require node 20 ([cc0cfd0](https://github.com/aeternity/ga-multisig-backend/commit/cc0cfd0e775ec6853280d4e162d912bff5b02819))
+* update gh actions cache version ([d0cb02b](https://github.com/aeternity/ga-multisig-backend/commit/d0cb02b049f14f5f0284dbb469cd754111f7a990))
+* update gh actions events ([94ef674](https://github.com/aeternity/ga-multisig-backend/commit/94ef67449cde4b841303971fc74ad33cf3ca68d8))
+* update initial deploy check step ([a154dd1](https://github.com/aeternity/ga-multisig-backend/commit/a154dd1d793e7dcd38a2ea122b69faaf2b37a1ef))
+* update sdk to 15.0.0 ([ecc27ea](https://github.com/aeternity/ga-multisig-backend/commit/ecc27eab6d17360e2c05c0915895c51fc14ef1f5))
+
 ## [1.1.4](https://github.com/aeternity/ga-multisig-backend/compare/v1.1.3...v1.1.4) (2024-11-13)
 
 
