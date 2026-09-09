@@ -46,11 +46,11 @@ hash really is the one of that transaction before storing it.
 decimal string or a number. They are optional and only accepted as a pair.
 
 Send them: since `@aeternity/aepp-sdk@15` a wallet prices a transaction by the consensus parameters
-and the demand of the node it is connected to rather than by the constants of an sdk release, so the
-values move with the network and the backend can't assume them. A request that omits them is
-verified against the pair every wallet used before, and against the minimums the node reports — so
-a wallet built against an older sdk keeps working across a fee raise, but one that picks its own
-price has to say which price it used.
+of the node it is connected to rather than by the constants of an sdk release, so the values move
+with the network and the backend can't assume them. A request that omits them is verified against
+the pair every wallet used before, and against the pair each minimum the node reports would give —
+so a wallet built against an older sdk keeps working, but one that prices its own way has to say
+which price it used.
 
 ## Indexing
 

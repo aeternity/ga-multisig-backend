@@ -8,7 +8,8 @@ const { authTxHashMatches } = require('../src/authTxHash');
 // every transaction the deployed wallets send.
 const TX = 'tx_+FkMAaEB4TK48d23oE5jt/qWR5pUu8UlpTGn8bwM5JISGQMGf7ChAfdeU/V4IiJ6WLRjCV1tq2V8q4BFdL5i3gvh+VJ50JA3iA3gtrOnZAAAhg9MNiAIAAABgAfc0jY=';
 const HASH_LEGACY = '29fb6ddc9991bb9e2e03ae8e16919819bc3b608f3ba8550308d370adda642453';
-const HASH_GAS_PRICE_2E9 = '8fda017b9e1e430cad8dc2df8e48e22880e9a8a5ebba171d3f1151a53060d4e1';
+const HASH_FEE_2E14_GAS_PRICE_2E9 = '37d9f514a26fbab585adc7764015541009ba35663ff73648305116472ed9e0fa';
+const HASH_FEE_1E11_GAS_PRICE_1E6 = 'db024d8045651297279a69f075a1fadead861e1c228a2ef16f011d4b7357b979';
 const HASH_FEE_2E14_GAS_PRICE_3E9 = 'e90cff3157630b360b21d703a6e8f3eead5e29cfd9938591a2fe2c958a62704f';
 
 // Only the calls the hash derivation makes: the network id it binds the transaction to, and - when
@@ -47,15 +48,23 @@ test('authTxHashMatches', async (t) => {
 
   await t.test('falls back to the minimums node reports when the request sends none', async () => {
     const onNode = nodeDouble({ minGasPrice: 2000000000n });
-    assert.equal(await authTxHashMatches(HASH_GAS_PRICE_2E9, TX, undefined, { onNode }), true);
+    assert.equal(await authTxHashMatches(HASH_FEE_2E14_GAS_PRICE_2E9, TX, undefined, { onNode }), true);
     // the legacy `gasPrice` is below what this node accepts, so a hash derived from it can't be of
     // a transaction this network would take
     assert.equal(await authTxHashMatches(HASH_LEGACY, TX, undefined, { onNode }), false);
   });
 
+  // what mainnet and testnet both report - a minimum below the price the sdk used to hardcode. The
+  // candidate has to be tried on that side of the legacy price too, or every wallet on sdk@15 that
+  // sends no pair is turned away.
+  await t.test('falls back to a minimum below the legacy price', async () => {
+    const onNode = nodeDouble({ minGasPrice: 1000000n });
+    assert.equal(await authTxHashMatches(HASH_FEE_1E11_GAS_PRICE_1E6, TX, undefined, { onNode }), true);
+  });
+
   await t.test('tries the miner minimum as well as the consensus one', async () => {
     const onNode = nodeDouble({ minGasPrice: 1000000000n, minMinerGasPrice: 2000000000n });
-    assert.equal(await authTxHashMatches(HASH_GAS_PRICE_2E9, TX, undefined, { onNode }), true);
+    assert.equal(await authTxHashMatches(HASH_FEE_2E14_GAS_PRICE_2E9, TX, undefined, { onNode }), true);
     assert.equal(await authTxHashMatches(HASH_LEGACY, TX, undefined, { onNode }), true);
   });
 

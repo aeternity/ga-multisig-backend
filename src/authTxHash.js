@@ -2,9 +2,16 @@ const { buildAuthTxHash, getCachedProtocolParameters, ArgumentError, IllegalArgu
 
 // The GaMetaTx `fee`/`gasPrice` every wallet used while the sdk priced them by the constants of
 // its own release. Since sdk@15 a wallet prices them by what the connected node reports, so they
-// follow a fee raise on the network and this pair is only what a wallet built against an older sdk
-// would have used - see `authTxHashMatches`.
+// follow the network and this pair is only what a wallet built against an older sdk would have
+// used - see `authTxHashMatches`.
 const LEGACY_GA_META_PARAMS = { fee: 1e14, gasPrice: 1e9 };
+
+// Gas a GaMetaTx is priced by: a wallet on sdk@15 takes `gasPrice` from the minimum node reports
+// and pays `gasPrice` times this as `fee`. The legacy pair is what that came out to back when the
+// price came from the sdk release instead, so the two agree wherever node still reports 1e9.
+const GA_META_TX_FEE_GAS = 100000n;
+
+const gaMetaParamsFor = (gasPrice) => ({ fee: (BigInt(gasPrice) * GA_META_TX_FEE_GAS).toString(), gasPrice: gasPrice.toString() });
 
 // A `gasPrice` below the consensus minimum node reports can't be part of a GaMetaTx node would
 // accept, and a `fee` that isn't an amount can't be part of one at all - both make a hash that
@@ -26,10 +33,11 @@ const authTxHashMatches = async (hash, tx, gaMetaParams, { onNode }) => {
 
   if (await matchesAuthTxHash(hash, tx, LEGACY_GA_META_PARAMS, onNode)) return true;
 
+  // Both minimums, and not only the ones above the legacy price: node reports a minimum well below
+  // it on mainnet and testnet alike, so a candidate is worth trying whichever side of 1e9 it falls.
   const { minGasPrice, minMinerGasPrice } = await getCachedProtocolParameters(onNode);
-  const gasPrices = [...new Set([minGasPrice, minMinerGasPrice])].filter((gasPrice) => gasPrice > BigInt(LEGACY_GA_META_PARAMS.gasPrice));
-  for (const gasPrice of gasPrices) {
-    if (await matchesAuthTxHash(hash, tx, { fee: LEGACY_GA_META_PARAMS.fee, gasPrice: gasPrice.toString() }, onNode)) return true;
+  for (const gasPrice of new Set([minGasPrice, minMinerGasPrice])) {
+    if (await matchesAuthTxHash(hash, tx, gaMetaParamsFor(gasPrice), onNode)) return true;
   }
   return false;
 };
