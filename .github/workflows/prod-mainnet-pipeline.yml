@@ -97,7 +97,8 @@ jobs:
 
       - uses: actions/checkout@v4
         with:
-          repository: aeternity/gitops-apps.git
+          repository: aeternity/gitops-apps-aelabs.git
+          token: ${{ secrets.BOT_GITHUB_TOKEN }}
           ref: prd
           persist-credentials: false
           fetch-depth: 0
