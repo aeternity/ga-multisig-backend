@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.6](https://github.com/aeternity/ga-multisig-backend/compare/v1.1.5...v1.1.6) (2026-09-09)
+
+
+### Bug Fixes
+
+* derive the fallback pair from the gas price node reports ([445ef17](https://github.com/aeternity/ga-multisig-backend/commit/445ef1720bb9c3299dbdaba873206a333ba166e4))
+
+
+### CI / CD
+
+* deploy prod from gitops-apps-aelabs ([9d7c58a](https://github.com/aeternity/ga-multisig-backend/commit/9d7c58a7679693077931ed1f0990fa4c59b8cb1f))
+
 ## [1.1.5](https://github.com/aeternity/ga-multisig-backend/compare/v1.1.4...v1.1.5) (2026-09-08)
 
 
