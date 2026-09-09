@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.6](https://github.com/aeternity/ga-multisig-backend/compare/v1.1.5...v1.1.6) (2026-09-09)
+
+
+### CI / CD
+
+* deploy prod from gitops-apps-aelabs ([9d7c58a](https://github.com/aeternity/ga-multisig-backend/commit/9d7c58a7679693077931ed1f0990fa4c59b8cb1f))
+
 ## [1.1.5](https://github.com/aeternity/ga-multisig-backend/compare/v1.1.4...v1.1.5) (2026-09-08)
 
 
