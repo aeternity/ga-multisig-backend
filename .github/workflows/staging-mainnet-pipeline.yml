@@ -10,7 +10,7 @@ env:
   ENV: 'stg'
   APP: 'ga-multisig-backend-mainnet'
 
-concurrency: multisig_staging_environment
+concurrency: multisig_staging_environment_mainnet
 
 jobs:
   main:
@@ -132,8 +132,9 @@ jobs:
           check_for_duplicate_msg: true
 
       - name: Push changes
-        uses: ad-m/github-push-action@master
+        uses: ad-m/github-push-action@v1.3.0
         with:
           repository: aeternity/gitops-apps-aelabs
           github_token: ${{ secrets.BOT_GITHUB_TOKEN }}
           branch: stg
+          pull: rebase

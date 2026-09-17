@@ -11,7 +11,7 @@ env:
   ENV: 'prd'
   APP: 'ga-multisig-backend-testnet'
 
-concurrency: multisig_production_environment
+concurrency: multisig_production_environment_testnet
 
 jobs:
   main:
@@ -121,8 +121,9 @@ jobs:
           app: ${{ env.APP }}
 
       - name: Push changes
-        uses: ad-m/github-push-action@master
+        uses: ad-m/github-push-action@v1.3.0
         with:
           repository: aeternity/gitops-apps-aelabs
           github_token: ${{ secrets.BOT_GITHUB_TOKEN }}
           branch: prd
+          pull: rebase
