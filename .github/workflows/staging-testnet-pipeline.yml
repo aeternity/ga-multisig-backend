@@ -10,7 +10,7 @@ env:
   ENV: 'stg'
   APP: 'ga-multisig-backend-testnet'
 
-concurrency: multisig_staging_environment
+concurrency: multisig_staging_environment_testnet
 
 jobs:
   main:

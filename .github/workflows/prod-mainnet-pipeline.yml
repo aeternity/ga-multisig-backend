@@ -11,7 +11,7 @@ env:
   ENV: 'prd'
   APP: 'ga-multisig-backend-mainnet'
 
-concurrency: multisig_production_environment
+concurrency: multisig_production_environment_mainnet
 
 jobs:
   main:
