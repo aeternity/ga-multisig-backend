@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.1.7](https://github.com/aeternity/ga-multisig-backend/compare/v1.1.6...v1.1.7) (2026-09-17)
+
+
+### Bug Fixes
+
+* use per-environment concurrency groups for mainnet/testnet pipelines ([e2d4f69](https://github.com/aeternity/ga-multisig-backend/commit/e2d4f694fa637edefa657a4c28c83dbd4b1d6bdb))
+
+
+### CI / CD
+
+* consolidate prod-mainnet/prod-testnet into one pipeline ([837525f](https://github.com/aeternity/ga-multisig-backend/commit/837525fc3116d057b3d7b5d55fa29e0a17ffff01))
+* pin gitops push action to latest release v1.3.0 ([9d496de](https://github.com/aeternity/ga-multisig-backend/commit/9d496def0aed0650fd1250065e05da3340d43fdd))
+* pull --rebase before pushing gitops changes to avoid push races ([1c2d2ea](https://github.com/aeternity/ga-multisig-backend/commit/1c2d2eae3547469565e0528dd121441cf4dbfeed))
+
+
+### Miscellaneous
+
+* trigger release-please after fixing v1.1.6 tag ancestry ([6599eaa](https://github.com/aeternity/ga-multisig-backend/commit/6599eaa8831011b46c8887ccd0b9aac3c72abdae))
+
 ## [1.1.6](https://github.com/aeternity/ga-multisig-backend/compare/v1.1.5...v1.1.6) (2026-09-09)
 
 
