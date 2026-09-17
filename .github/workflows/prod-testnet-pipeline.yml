@@ -121,7 +121,7 @@ jobs:
           app: ${{ env.APP }}
 
       - name: Push changes
-        uses: ad-m/github-push-action@master
+        uses: ad-m/github-push-action@v1.3.0
         with:
           repository: aeternity/gitops-apps-aelabs
           github_token: ${{ secrets.BOT_GITHUB_TOKEN }}
