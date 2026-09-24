@@ -115,7 +115,7 @@ jobs:
           app: ${{ env.APP }}
 
       - name: Staging undeploy
-        if: ((github.event_name == 'pull_request' && github.event.action == 'closed' && startsWith(github.head_ref, 'release') != true) || (github.event_name == 'delete' && github.event.ref_type == 'branch'))
+        if: ((github.event_name == 'pull_request' && github.event.action == 'closed') || (github.event_name == 'delete' && github.event.ref_type == 'branch'))
         uses: aeternity/ae-github-actions/argocd-undeploy@v5
         with:
           url-prefix: pr-${{ env.PR_NUMBER }}
