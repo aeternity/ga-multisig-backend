@@ -142,7 +142,8 @@ jobs:
           pull: rebase
 
   testnet:
-    needs: release
+    # depends on mainnet too so the two deploy jobs never race pushing to the same gitops-apps-aelabs prd branch
+    needs: [release, mainnet]
     runs-on: ubuntu-latest
     name: Production GA Multisig Backend Pipeline (testnet)
     env:
