@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.8](https://github.com/aeternity/ga-multisig-backend/compare/v1.1.7...v1.1.8) (2026-09-24)
+
+
+### CI / CD
+
+* serialize testnet deploy after mainnet to avoid gitops push race ([#36](https://github.com/aeternity/ga-multisig-backend/issues/36)) ([f583eac](https://github.com/aeternity/ga-multisig-backend/commit/f583eac8df6511c9571ee60890de3dfbeca4053a))
+
 ## [1.1.7](https://github.com/aeternity/ga-multisig-backend/compare/v1.1.6...v1.1.7) (2026-09-17)
 
 
