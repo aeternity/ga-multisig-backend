@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.9](https://github.com/aeternity/ga-multisig-backend/compare/v1.1.8...v1.1.9) (2026-09-24)
+
+
+### Bug Fixes
+
+* undeploy stg PR preview on close regardless of branch name ([#38](https://github.com/aeternity/ga-multisig-backend/issues/38)) ([fc616f0](https://github.com/aeternity/ga-multisig-backend/commit/fc616f0c37f1aa5a7575977cd243215238b2dfbb))
+
 ## [1.1.8](https://github.com/aeternity/ga-multisig-backend/compare/v1.1.7...v1.1.8) (2026-09-24)
 
 
