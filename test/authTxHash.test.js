@@ -13,11 +13,14 @@ const HASH_FEE_1E11_GAS_PRICE_1E6 = 'db024d8045651297279a69f075a1fadead861e1c228
 const HASH_FEE_2E14_GAS_PRICE_3E9 = 'e90cff3157630b360b21d703a6e8f3eead5e29cfd9938591a2fe2c958a62704f';
 
 // Only the calls the hash derivation makes: the network id it binds the transaction to, and - when
-// the double reports them - the consensus parameters the GaMetaTx `gasPrice` is checked against.
-// A double without the parameter endpoints stands for a node the sdk falls back to its own release
-// values for, which are the ones the legacy pair was priced by.
-const nodeDouble = ({ minGasPrice, minMinerGasPrice } = {}) => ({
-  getNodeInfo: async () => ({ nodeNetworkId: 'ae_uat' }),
+// the double reports them - the minimums the GaMetaTx `gasPrice` is checked against. A double
+// without the parameter endpoints stands for a node the sdk falls back to its own release values
+// for, which are the ones the legacy pair was priced by.
+const nodeDouble = ({ minGasPrice, minMinerGasPrice, onNodeInfo } = {}) => ({
+  getNodeInfo: async () => {
+    onNodeInfo?.();
+    return { nodeNetworkId: 'ae_uat' };
+  },
   ...(minGasPrice == null
     ? {}
     : {
@@ -46,7 +49,7 @@ test('authTxHashMatches', async (t) => {
     assert.equal(await authTxHashMatches(HASH_LEGACY, TX, undefined, { onNode: nodeDouble() }), true);
   });
 
-  await t.test('falls back to the minimums node reports when the request sends none', async () => {
+  await t.test('falls back to the floor node reports when the request sends none', async () => {
     const onNode = nodeDouble({ minGasPrice: 2000000000n });
     assert.equal(await authTxHashMatches(HASH_FEE_2E14_GAS_PRICE_2E9, TX, undefined, { onNode }), true);
     // the legacy `gasPrice` is below what this node accepts, so a hash derived from it can't be of
@@ -54,18 +57,34 @@ test('authTxHashMatches', async (t) => {
     assert.equal(await authTxHashMatches(HASH_LEGACY, TX, undefined, { onNode }), false);
   });
 
-  // what mainnet and testnet both report - a minimum below the price the sdk used to hardcode. The
-  // candidate has to be tried on that side of the legacy price too, or every wallet on sdk@15 that
-  // sends no pair is turned away.
+  // a node whose miner takes the consensus minimum mainnet and testnet run - a floor below the
+  // price the sdk used to hardcode, which has to be tried on that side of the legacy price too
   await t.test('falls back to a minimum below the legacy price', async () => {
     const onNode = nodeDouble({ minGasPrice: 1000000n });
     assert.equal(await authTxHashMatches(HASH_FEE_1E11_GAS_PRICE_1E6, TX, undefined, { onNode }), true);
   });
 
-  await t.test('tries the miner minimum as well as the consensus one', async () => {
+  // what mainnet and testnet both report: their miners refuse the consensus minimum, so a wallet on
+  // sdk@15 prices by the miner one and arrives at the legacy pair
+  await t.test('prices by the miner minimum where it is above the consensus one', async () => {
+    const onNode = nodeDouble({ minGasPrice: 1000000n, minMinerGasPrice: 1000000000n });
+    assert.equal(await authTxHashMatches(HASH_LEGACY, TX, undefined, { onNode }), true);
+    assert.equal(await authTxHashMatches(HASH_FEE_1E11_GAS_PRICE_1E6, TX, undefined, { onNode }), false);
+    assert.equal(await authTxHashMatches(HASH_FEE_1E11_GAS_PRICE_1E6, TX, { fee: '100000000000', gasPrice: '1000000' }, { onNode }), false);
+  });
+
+  await t.test('checks a hash once where the floor is the legacy price', async () => {
+    let requests = 0;
+    const onNode = nodeDouble({ minGasPrice: 1000000n, minMinerGasPrice: 1000000000n, onNodeInfo: () => (requests += 1) });
+    assert.equal(await authTxHashMatches('0'.repeat(64), TX, undefined, { onNode }), false);
+    assert.equal(requests, 1);
+  });
+
+  await t.test('falls back to a miner minimum above the legacy price', async () => {
     const onNode = nodeDouble({ minGasPrice: 1000000000n, minMinerGasPrice: 2000000000n });
     assert.equal(await authTxHashMatches(HASH_FEE_2E14_GAS_PRICE_2E9, TX, undefined, { onNode }), true);
-    assert.equal(await authTxHashMatches(HASH_LEGACY, TX, undefined, { onNode }), true);
+    // the miner of this node refuses a GaMetaTx at the legacy `gasPrice`
+    assert.equal(await authTxHashMatches(HASH_LEGACY, TX, undefined, { onNode }), false);
   });
 
   await t.test('rejects the hash of an unrelated transaction', async () => {
